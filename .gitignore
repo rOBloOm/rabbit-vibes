@@ -1,0 +1,11 @@
+# Godot 4 generated data
+.godot/
+*.translation
+
+# Local/editor/platform clutter
+.DS_Store
+Thumbs.db
+
+# Build/export output
+build/
+

@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/GoalBurrow.gd" id="1_goal"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_goal"]
+size = Vector2(84, 78)
+
+[node name="GoalBurrow" type="Area2D"]
+script = ExtResource("1_goal")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_goal")
+
+[node name="Mound" type="Polygon2D" parent="."]
+position = Vector2(0, -6)
+color = Color(0.537255, 0.772549, 0.4, 1)
+polygon = PackedVector2Array(-56, 16, -42, -8, -16, -24, 12, -24, 38, -10, 56, 16, 24, 26, -28, 26)
+
+[node name="Door" type="Polygon2D" parent="."]
+position = Vector2(0, -4)
+color = Color(0.14902, 0.113725, 0.0823529, 1)
+polygon = PackedVector2Array(-18, 18, -22, 2, -16, -14, 0, -22, 16, -14, 22, 2, 18, 18)
+
+[node name="Glow" type="Polygon2D" parent="."]
+position = Vector2(0, -2)
+visible = false
+color = Color(1, 0.905882, 0.541176, 0.5)
+polygon = PackedVector2Array(-26, 20, -30, 0, -20, -18, 0, -28, 20, -18, 30, 0, 26, 20)
+
+[node name="Post" type="Polygon2D" parent="."]
+position = Vector2(34, -34)
+color = Color(0.462745, 0.301961, 0.176471, 1)
+polygon = PackedVector2Array(-4, 30, 4, 30, 4, -18, -4, -18)
+
+[node name="Sign" type="Polygon2D" parent="."]
+position = Vector2(34, -60)
+color = Color(0.568627, 0.411765, 0.25098, 1)
+polygon = PackedVector2Array(-18, -10, 18, -10, 18, 10, -18, 10)
+
+[node name="LockIcon" type="Polygon2D" parent="."]
+position = Vector2(34, -60)
+color = Color(0.964706, 0.929412, 0.721569, 1)
+polygon = PackedVector2Array(-5, -2, -5, 6, 5, 6, 5, -2, 2, -2, 2, -7, 0, -10, -2, -7, -2, -2)
+

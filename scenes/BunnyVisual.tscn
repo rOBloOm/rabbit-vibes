@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[node name="BunnyVisual" type="Node2D"]
+position = Vector2(0, 8)
+
+[node name="BackFoot" type="Polygon2D" parent="."]
+position = Vector2(-10, 16)
+color = Color(0.85, 0.82, 0.86, 1)
+polygon = PackedVector2Array(-10, -3, 4, -3, 8, 3, -12, 4)
+
+[node name="Tail" type="Polygon2D" parent="."]
+position = Vector2(-18, -2)
+color = Color(0.95, 0.95, 0.98, 1)
+polygon = PackedVector2Array(-6, -4, 0, -7, 6, -4, 7, 2, 2, 7, -4, 6, -7, 1)
+
+[node name="Body" type="Polygon2D" parent="."]
+position = Vector2(-2, -2)
+color = Color(0.9, 0.88, 0.92, 1)
+polygon = PackedVector2Array(-18, -10, -10, -19, 6, -18, 18, -10, 20, 2, 13, 13, -2, 17, -16, 11, -21, 1)
+
+[node name="FrontFoot" type="Polygon2D" parent="."]
+position = Vector2(10, 15)
+color = Color(0.85, 0.82, 0.86, 1)
+polygon = PackedVector2Array(-10, -3, 4, -3, 8, 3, -12, 4)
+
+[node name="Head" type="Node2D" parent="."]
+position = Vector2(16, -16)
+
+[node name="EarBack" type="Polygon2D" parent="Head"]
+position = Vector2(-4, -18)
+rotation = -0.12
+color = Color(0.86, 0.83, 0.88, 1)
+polygon = PackedVector2Array(-4, 18, -8, 4, -6, -18, 0, -34, 6, -18, 8, 4, 4, 18)
+
+[node name="EarFront" type="Polygon2D" parent="Head"]
+position = Vector2(6, -20)
+rotation = 0.08
+color = Color(0.91, 0.88, 0.94, 1)
+polygon = PackedVector2Array(-4, 18, -8, 4, -5, -20, 0, -38, 6, -20, 8, 4, 4, 18)
+
+[node name="HeadShape" type="Polygon2D" parent="Head"]
+color = Color(0.95, 0.93, 0.97, 1)
+polygon = PackedVector2Array(-12, -10, -3, -17, 10, -16, 16, -7, 15, 4, 8, 11, -2, 13, -11, 8, -15, 0)
+
+[node name="Eye" type="Polygon2D" parent="Head"]
+position = Vector2(6, -3)
+color = Color(0.1, 0.09, 0.12, 1)
+polygon = PackedVector2Array(-1, -2, 1, -2, 2, 0, 1, 2, -1, 2, -2, 0)
+
+[node name="Nose" type="Polygon2D" parent="Head"]
+position = Vector2(12, 4)
+color = Color(0.96, 0.64, 0.74, 1)
+polygon = PackedVector2Array(-2, -1, 2, -1, 0, 2)
+

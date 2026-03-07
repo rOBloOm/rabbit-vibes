@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/CarrotPatch.gd" id="1_carrot_patch"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_patch"]
+size = Vector2(56, 44)
+
+[node name="CarrotPatch" type="Area2D"]
+script = ExtResource("1_carrot_patch")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_patch")
+
+[node name="Hole" type="Polygon2D" parent="."]
+visible = false
+position = Vector2(0, -2)
+color = Color(0.235294, 0.176471, 0.105882, 1)
+polygon = PackedVector2Array(-20, 4, -10, -6, 8, -8, 20, 2, 8, 10, -12, 10)
+
+[node name="Soil" type="Polygon2D" parent="."]
+position = Vector2(0, -4)
+color = Color(0.458824, 0.313726, 0.188235, 1)
+polygon = PackedVector2Array(-24, 8, -18, -2, -8, -8, 10, -10, 22, -2, 28, 8, 8, 14, -14, 14)
+
+[node name="Leaves" type="Node2D" parent="."]
+position = Vector2(0, -18)
+
+[node name="LeafLeft" type="Polygon2D" parent="Leaves"]
+position = Vector2(-8, 0)
+rotation = -0.34
+color = Color(0.341176, 0.619608, 0.262745, 1)
+polygon = PackedVector2Array(-3, 10, -5, 2, -4, -12, 0, -24, 4, -12, 5, 2, 3, 10)
+
+[node name="LeafCenter" type="Polygon2D" parent="Leaves"]
+color = Color(0.411765, 0.72549, 0.298039, 1)
+polygon = PackedVector2Array(-3, 12, -5, 2, -4, -14, 0, -28, 4, -14, 5, 2, 3, 12)
+
+[node name="LeafRight" type="Polygon2D" parent="Leaves"]
+position = Vector2(8, 0)
+rotation = 0.34
+color = Color(0.341176, 0.619608, 0.262745, 1)
+polygon = PackedVector2Array(-3, 10, -5, 2, -4, -12, 0, -24, 4, -12, 5, 2, 3, 10)
+
+[node name="CarrotBody" type="Polygon2D" parent="."]
+visible = false
+position = Vector2(0, 6)
+color = Color(0.941176, 0.52549, 0.203922, 1)
+polygon = PackedVector2Array(-6, -6, 6, -6, 12, 2, 0, 30, -12, 2)
+
+[node name="MunchPlayer" type="AudioStreamPlayer2D" parent="."]
+volume_db = -8.0
+

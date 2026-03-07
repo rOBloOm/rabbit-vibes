@@ -1,0 +1,261 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/Main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/Tree.tscn" id="3_tree"]
+[ext_resource type="PackedScene" path="res://scenes/Bush.tscn" id="4_bush"]
+[ext_resource type="PackedScene" path="res://scenes/CarrotPatch.tscn" id="5_carrot"]
+[ext_resource type="PackedScene" path="res://scenes/WindAmbient.tscn" id="6_wind"]
+[ext_resource type="PackedScene" path="res://scenes/BirdFlock.tscn" id="7_birds"]
+[ext_resource type="PackedScene" path="res://scenes/GoalBurrow.tscn" id="8_goal"]
+[ext_resource type="PackedScene" path="res://scenes/ThornPatch.tscn" id="9_thorns"]
+[ext_resource type="PackedScene" path="res://scenes/FoxEnemy.tscn" id="10_fox"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(3200, 180)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_a"]
+size = Vector2(260, 28)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_b"]
+size = Vector2(200, 24)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_c"]
+size = Vector2(240, 28)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_d"]
+size = Vector2(220, 26)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_e"]
+size = Vector2(190, 24)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -17.0
+autoplay = true
+
+[node name="Sky" type="Polygon2D" parent="."]
+position = Vector2(1600, 360)
+color = Color(0.662745, 0.854902, 0.988235, 1)
+polygon = PackedVector2Array(-1600, -360, 1600, -360, 1600, 360, -1600, 360)
+
+[node name="Sun" type="Polygon2D" parent="."]
+position = Vector2(2700, 120)
+color = Color(1, 0.92549, 0.560784, 1)
+polygon = PackedVector2Array(-34, -12, -24, -30, -6, -38, 14, -34, 30, -18, 38, 2, 30, 24, 10, 36, -14, 34, -30, 16, -38, -4)
+
+[node name="FarHill" type="Polygon2D" parent="."]
+position = Vector2(1200, 560)
+color = Color(0.564706, 0.792157, 0.529412, 1)
+polygon = PackedVector2Array(-1320, 160, -1180, 86, -980, 36, -760, 18, -520, 36, -280, 0, 10, -28, 340, 18, 640, -12, 980, 42, 1220, 120, 1320, 160)
+
+[node name="NearHill" type="Polygon2D" parent="."]
+position = Vector2(2100, 610)
+color = Color(0.466667, 0.733333, 0.403922, 1)
+polygon = PackedVector2Array(-1480, 170, -1320, 78, -1080, 18, -840, 8, -560, 34, -240, -24, 120, -10, 420, -48, 730, -4, 1000, 56, 1260, 126, 1480, 170)
+
+[node name="WindAmbient" parent="." instance=ExtResource("6_wind")]
+
+[node name="BirdFlock" parent="." instance=ExtResource("7_birds")]
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(1600, 690)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="GroundVisual" type="Polygon2D" parent="Ground"]
+color = Color(0.388235, 0.694118, 0.305882, 1)
+polygon = PackedVector2Array(-1600, -90, 1600, -90, 1600, 90, -1600, 90)
+
+[node name="PlatformA" type="StaticBody2D" parent="."]
+position = Vector2(560, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformA"]
+shape = SubResource("RectangleShape2D_platform_a")
+
+[node name="PlatformVisual" type="Polygon2D" parent="PlatformA"]
+color = Color(0.462745, 0.705882, 0.34902, 1)
+polygon = PackedVector2Array(-130, -14, 130, -14, 130, 14, -130, 14)
+
+[node name="PlatformB" type="StaticBody2D" parent="."]
+position = Vector2(900, 490)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformB"]
+shape = SubResource("RectangleShape2D_platform_b")
+
+[node name="PlatformVisual" type="Polygon2D" parent="PlatformB"]
+color = Color(0.462745, 0.705882, 0.34902, 1)
+polygon = PackedVector2Array(-100, -12, 100, -12, 100, 12, -100, 12)
+
+[node name="PlatformC" type="StaticBody2D" parent="."]
+position = Vector2(1280, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformC"]
+shape = SubResource("RectangleShape2D_platform_c")
+
+[node name="PlatformVisual" type="Polygon2D" parent="PlatformC"]
+color = Color(0.462745, 0.705882, 0.34902, 1)
+polygon = PackedVector2Array(-120, -14, 120, -14, 120, 14, -120, 14)
+
+[node name="PlatformD" type="StaticBody2D" parent="."]
+position = Vector2(1680, 370)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformD"]
+shape = SubResource("RectangleShape2D_platform_d")
+
+[node name="PlatformVisual" type="Polygon2D" parent="PlatformD"]
+color = Color(0.462745, 0.705882, 0.34902, 1)
+polygon = PackedVector2Array(-110, -13, 110, -13, 110, 13, -110, 13)
+
+[node name="PlatformE" type="StaticBody2D" parent="."]
+position = Vector2(2560, 350)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformE"]
+shape = SubResource("RectangleShape2D_platform_e")
+
+[node name="PlatformVisual" type="Polygon2D" parent="PlatformE"]
+color = Color(0.462745, 0.705882, 0.34902, 1)
+polygon = PackedVector2Array(-95, -12, 95, -12, 95, 12, -95, 12)
+
+[node name="TreeA" parent="." instance=ExtResource("3_tree")]
+position = Vector2(240, 602)
+
+[node name="TreeB" parent="." instance=ExtResource("3_tree")]
+position = Vector2(1020, 602)
+
+[node name="TreeC" parent="." instance=ExtResource("3_tree")]
+position = Vector2(1960, 602)
+
+[node name="TreeD" parent="." instance=ExtResource("3_tree")]
+position = Vector2(3020, 602)
+
+[node name="BushA" parent="." instance=ExtResource("4_bush")]
+position = Vector2(520, 610)
+
+[node name="BushB" parent="." instance=ExtResource("4_bush")]
+position = Vector2(1440, 610)
+
+[node name="BushC" parent="." instance=ExtResource("4_bush")]
+position = Vector2(2280, 610)
+
+[node name="BushD" parent="." instance=ExtResource("4_bush")]
+position = Vector2(2820, 610)
+
+[node name="CarrotPatchA" parent="." instance=ExtResource("5_carrot")]
+position = Vector2(350, 596)
+
+[node name="CarrotPatchB" parent="." instance=ExtResource("5_carrot")]
+position = Vector2(930, 468)
+
+[node name="CarrotPatchC" parent="." instance=ExtResource("5_carrot")]
+position = Vector2(1710, 348)
+
+[node name="CarrotPatchD" parent="." instance=ExtResource("5_carrot")]
+position = Vector2(2585, 328)
+
+[node name="GoalBurrow" parent="." instance=ExtResource("8_goal")]
+position = Vector2(3090, 594)
+
+[node name="ThornPatchA" parent="." instance=ExtResource("9_thorns")]
+position = Vector2(720, 612)
+
+[node name="ThornPatchB" parent="." instance=ExtResource("9_thorns")]
+position = Vector2(1460, 412)
+
+[node name="ThornPatchC" parent="." instance=ExtResource("9_thorns")]
+position = Vector2(2340, 612)
+
+[node name="FoxEnemy" parent="." instance=ExtResource("10_fox")]
+position = Vector2(2050, 598)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(170, 550)
+
+[node name="Hud" type="CanvasLayer" parent="."]
+layer = 1
+
+[node name="CounterRoot" type="Control" parent="Hud"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 214.0
+offset_bottom = 100.0
+
+[node name="CounterBackground" type="ColorRect" parent="Hud/CounterRoot"]
+offset_right = 194.0
+offset_bottom = 80.0
+color = Color(0.137255, 0.219608, 0.14902, 0.7)
+
+[node name="CounterLabel" type="Label" parent="Hud/CounterRoot"]
+offset_left = 14.0
+offset_top = 12.0
+offset_right = 184.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 22
+text = "Carrots: 0/0"
+
+[node name="HintLabel" type="Label" parent="Hud/CounterRoot"]
+offset_left = 14.0
+offset_top = 42.0
+offset_right = 182.0
+offset_bottom = 74.0
+theme_override_font_sizes/font_size = 14
+text = "Collect all carrots to unlock the burrow."
+autowrap_mode = 3
+
+[node name="TitleOverlay" type="Control" parent="Hud"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Backdrop" type="ColorRect" parent="Hud/TitleOverlay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.0862745, 0.145098, 0.101961, 0.62)
+
+[node name="TitleLabel" type="Label" parent="Hud/TitleOverlay"]
+offset_left = 310.0
+offset_top = 180.0
+offset_right = 980.0
+offset_bottom = 430.0
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "Jumpy Meadow\n\nCollect every carrot, avoid the thorns and fox, then reach the burrow.\n\nPress Enter to start"
+autowrap_mode = 3
+
+[node name="PauseOverlay" type="Control" parent="Hud"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Backdrop" type="ColorRect" parent="Hud/PauseOverlay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.0470588, 0.0745098, 0.0627451, 0.56)
+
+[node name="PauseLabel" type="Label" parent="Hud/PauseOverlay"]
+offset_left = 380.0
+offset_top = 220.0
+offset_right = 900.0
+offset_bottom = 430.0
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "Paused\n\nPress Esc or Enter to resume\nPress R to restart"
+
+[node name="WinOverlay" type="Control" parent="Hud"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Backdrop" type="ColorRect" parent="Hud/WinOverlay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.145098, 0.117647, 0.0470588, 0.6)
+
+[node name="WinLabel" type="Label" parent="Hud/WinOverlay"]
+offset_left = 300.0
+offset_top = 200.0
+offset_right = 980.0
+offset_bottom = 430.0
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "You brought every carrot home!\n\nPress Enter to play again\nPress R to restart now"
+
