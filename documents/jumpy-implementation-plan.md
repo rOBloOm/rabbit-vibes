@@ -142,4 +142,5 @@ Deliverable:
 - Migrated the project from C#/.NET to pure GDScript and removed the old C# project files on 2026-03-07
 - Added GitHub Pages deployment scaffolding, a Godot `.gitignore`, and initialized a local Git repository on 2026-03-07
 - Verified on 2026-03-08 that the active project still runs from GDScript scene/script pairs and that no C# source or project files remain in the repository
+- Rebuilt the root project shell as a clean standard-Godot configuration around the existing game content and re-validated local startup with the standard editor on 2026-03-08
 

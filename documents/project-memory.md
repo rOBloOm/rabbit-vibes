@@ -31,6 +31,8 @@
 - Verified on 2026-03-08 that the active project is wired to GDScript (`scenes/Main.tscn` -> `scripts/Main.gd`, `scenes/Player.tscn` -> `scripts/Player.gd`) and that no `.cs`, `.csproj`, `.sln`, or `.slnx` files remain in the repository
 - Verified on 2026-03-08 that local Web export with the Mono/.NET Godot build is blocked by Godot 4's C# Web export limitation, while the standard Godot build proceeds past that check and instead requires Web export templates to be installed locally
 - Removed the stale `[dotnet]` section from `project.godot` on 2026-03-08 and restored `renderer/rendering_method.web="gl_compatibility"` for explicit Web-target configuration
+- Verified on 2026-03-08 that local standard-Godot Web export now succeeds after installing Web templates and changing `export_presets.cfg` to `vram_texture_compression/for_mobile=false`; export output is produced under `build/web/`
+- Rebuilt the tracked project shell on 2026-03-08 as a standard-Godot GDScript project around the existing `assets/`, `scenes/`, and `scripts/` content; a local standard-build headless smoke run reached `jumpy Main scene ready`
 - Old C# project files (`jumpy.csproj`, `jumpy.slnx`, `scripts/*.cs`) were removed on 2026-03-07 during the web-export migration
 - Local Git repository initialized on branch `main` on 2026-03-07
 - GitHub Pages deployment scaffolding now exists via `.github/workflows/deploy-pages.yml`, `export_presets.cfg`, and `.gitignore`
