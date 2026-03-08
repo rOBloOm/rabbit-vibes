@@ -1,3 +1,8 @@
+---
+name: augment-memory-skill
+description: Uses documents as durable workspace memory for this project
+---
+
 ## Agent Memory Skill
 
 Purpose:
