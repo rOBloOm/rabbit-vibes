@@ -22,8 +22,41 @@ position = Vector2(0, -4)
 color = Color(0.458824, 0.313726, 0.188235, 1)
 polygon = PackedVector2Array(-24, 8, -18, -2, -8, -8, 10, -10, 22, -2, 28, 8, 8, 14, -14, 14)
 
+[node name="SoilOutline" type="Polygon2D" parent="."]
+visible = false
+position = Vector2(0, -4)
+scale = Vector2(1.16, 1.16)
+color = Color(1, 0.956863, 0.568627, 0.55)
+polygon = PackedVector2Array(-24, 8, -18, -2, -8, -8, 10, -10, 22, -2, 28, 8, 8, 14, -14, 14)
+z_index = 1
+
 [node name="Leaves" type="Node2D" parent="."]
 position = Vector2(0, -18)
+
+[node name="LeafOutlineLeft" type="Polygon2D" parent="Leaves"]
+visible = false
+position = Vector2(-8, 0)
+rotation = -0.34
+scale = Vector2(1.22, 1.22)
+color = Color(0.956863, 1, 0.713726, 0.62)
+polygon = PackedVector2Array(-3, 10, -5, 2, -4, -12, 0, -24, 4, -12, 5, 2, 3, 10)
+z_index = 1
+
+[node name="LeafOutlineCenter" type="Polygon2D" parent="Leaves"]
+visible = false
+scale = Vector2(1.18, 1.18)
+color = Color(0.956863, 1, 0.713726, 0.65)
+polygon = PackedVector2Array(-3, 12, -5, 2, -4, -14, 0, -28, 4, -14, 5, 2, 3, 12)
+z_index = 1
+
+[node name="LeafOutlineRight" type="Polygon2D" parent="Leaves"]
+visible = false
+position = Vector2(8, 0)
+rotation = 0.34
+scale = Vector2(1.22, 1.22)
+color = Color(0.956863, 1, 0.713726, 0.62)
+polygon = PackedVector2Array(-3, 10, -5, 2, -4, -12, 0, -24, 4, -12, 5, 2, 3, 10)
+z_index = 1
 
 [node name="LeafLeft" type="Polygon2D" parent="Leaves"]
 position = Vector2(-8, 0)

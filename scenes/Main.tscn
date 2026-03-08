@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://scripts/Main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="2_player"]
@@ -22,6 +22,8 @@ size = Vector2(240, 28)
 size = Vector2(220, 26)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_e"]
 size = Vector2(190, 24)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_world_wall"]
+size = Vector2(40, 1400)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
@@ -33,7 +35,7 @@ autoplay = true
 [node name="Sky" type="Polygon2D" parent="."]
 position = Vector2(1600, 360)
 color = Color(0.662745, 0.854902, 0.988235, 1)
-polygon = PackedVector2Array(-1600, -360, 1600, -360, 1600, 360, -1600, 360)
+polygon = PackedVector2Array(-1600, -520, 1600, -520, 1600, 520, -1600, 520)
 
 [node name="Sun" type="Polygon2D" parent="."]
 position = Vector2(2700, 120)
@@ -62,7 +64,19 @@ shape = SubResource("RectangleShape2D_ground")
 
 [node name="GroundVisual" type="Polygon2D" parent="Ground"]
 color = Color(0.388235, 0.694118, 0.305882, 1)
-polygon = PackedVector2Array(-1600, -90, 1600, -90, 1600, 90, -1600, 90)
+polygon = PackedVector2Array(-1600, -90, 1600, -90, 1600, 260, -1600, 260)
+
+[node name="LeftBoundary" type="StaticBody2D" parent="."]
+position = Vector2(-20, 320)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftBoundary"]
+shape = SubResource("RectangleShape2D_world_wall")
+
+[node name="RightBoundary" type="StaticBody2D" parent="."]
+position = Vector2(3220, 320)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightBoundary"]
+shape = SubResource("RectangleShape2D_world_wall")
 
 [node name="PlatformA" type="StaticBody2D" parent="."]
 position = Vector2(560, 560)
@@ -105,7 +119,7 @@ color = Color(0.462745, 0.705882, 0.34902, 1)
 polygon = PackedVector2Array(-110, -13, 110, -13, 110, 13, -110, 13)
 
 [node name="PlatformE" type="StaticBody2D" parent="."]
-position = Vector2(2560, 350)
+position = Vector2(2240, 350)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformE"]
 shape = SubResource("RectangleShape2D_platform_e")
@@ -148,7 +162,7 @@ position = Vector2(930, 468)
 position = Vector2(1710, 348)
 
 [node name="CarrotPatchD" parent="." instance=ExtResource("5_carrot")]
-position = Vector2(2585, 328)
+position = Vector2(2265, 328)
 
 [node name="GoalBurrow" parent="." instance=ExtResource("8_goal")]
 position = Vector2(3090, 594)
@@ -175,27 +189,29 @@ layer = 1
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 214.0
-offset_bottom = 100.0
+offset_bottom = 112.0
 
 [node name="CounterBackground" type="ColorRect" parent="Hud/CounterRoot"]
 offset_right = 194.0
-offset_bottom = 80.0
+offset_bottom = 92.0
 color = Color(0.137255, 0.219608, 0.14902, 0.7)
 
 [node name="CounterLabel" type="Label" parent="Hud/CounterRoot"]
 offset_left = 14.0
-offset_top = 12.0
+offset_top = 8.0
 offset_right = 184.0
-offset_bottom = 40.0
+offset_bottom = 42.0
 theme_override_font_sizes/font_size = 22
+vertical_alignment = 1
 text = "Carrots: 0/0"
 
 [node name="HintLabel" type="Label" parent="Hud/CounterRoot"]
 offset_left = 14.0
-offset_top = 42.0
+offset_top = 44.0
 offset_right = 182.0
-offset_bottom = 74.0
+offset_bottom = 86.0
 theme_override_font_sizes/font_size = 14
+vertical_alignment = 1
 text = "Collect all carrots to unlock the burrow."
 autowrap_mode = 3
 
@@ -209,14 +225,18 @@ anchor_bottom = 1.0
 color = Color(0.0862745, 0.145098, 0.101961, 0.62)
 
 [node name="TitleLabel" type="Label" parent="Hud/TitleOverlay"]
-offset_left = 310.0
-offset_top = 180.0
-offset_right = 980.0
-offset_bottom = 430.0
-theme_override_font_sizes/font_size = 34
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -335.0
+offset_top = -245.0
+offset_right = 335.0
+offset_bottom = 145.0
+theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
 vertical_alignment = 1
-text = "Jumpy Meadow\n\nCollect every carrot, avoid the thorns and fox, then reach the burrow.\n\nPress Enter to start"
+text = "Jumpy Meadow\n\nCollect every carrot, avoid the thorns and fox, then reach the burrow.\n\nControls\nA / D - Move\nSpace or W - Jump\nE - Dig / interact\nEsc or P - Pause\n\nPress Enter to start"
 autowrap_mode = 3
 
 [node name="PauseOverlay" type="Control" parent="Hud"]

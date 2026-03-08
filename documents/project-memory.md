@@ -62,7 +62,7 @@
 - The main scene now includes a carrot counter HUD
 - Procedurally generated audio assets exist at `assets/audio/meadow_theme.wav` and `assets/audio/carrot_munch.wav`
 - Procedurally generated jump audio exists at `assets/audio/rabbit_jump.wav`
-- Audio is loaded at runtime via `AudioStreamWAV.load_from_file(...)` instead of scene-time audio imports
+- Audio is now loaded via imported/preloaded resources in GDScript (`preload("res://assets/audio/*.wav")`), which fixed missing audio in local Web exports on 2026-03-08
 - The current loop now includes a title overlay, pause overlay, and win overlay managed by `Main.gd`
 - All carrots must be collected to unlock the burrow goal in `scenes/GoalBurrow.tscn`
 - Hazards/enemies now exist via `scenes/ThornPatch.tscn` and `scenes/FoxEnemy.tscn`; touching them respawns the player at the start

@@ -4,8 +4,9 @@ const CAMERA_LIMIT_LEFT := 0
 const CAMERA_LIMIT_TOP := 0
 const CAMERA_LIMIT_RIGHT := 3200
 const CAMERA_LIMIT_BOTTOM := 900
+const MEADOW_THEME := preload("res://assets/audio/meadow_theme.wav")
 
-enum GameState { TITLE, PLAYING, PAUSED, WON }
+enum GameState { TITLE, PLAYING, PAUSED, WON, DEFEATED }
 
 var _counter_root: Control
 var _carrot_counter_label: Label
@@ -32,6 +33,8 @@ func _ready() -> void:
 	print("jumpy Main scene ready")
 
 func _input(event: InputEvent) -> void:
+	if _game_state == GameState.DEFEATED:
+		return
 	if event.is_action_pressed("menu_accept"):
 		if _game_state == GameState.TITLE:
 			_start_game()
@@ -44,7 +47,7 @@ func _input(event: InputEvent) -> void:
 			_pause_game()
 		elif _game_state == GameState.PAUSED:
 			_resume_game()
-	elif event.is_action_pressed("restart_level") and _game_state != GameState.PLAYING:
+	elif event.is_action_pressed("restart_level") and _game_state in [GameState.TITLE, GameState.PAUSED, GameState.WON]:
 		_restart_scene()
 
 func _cache_nodes() -> void:
@@ -69,7 +72,7 @@ func _configure_camera() -> void:
 func _configure_music() -> void:
 	var music_player: AudioStreamPlayer = $MusicPlayer
 	if music_player.stream == null:
-		music_player.stream = AudioStreamWAV.load_from_file("res://assets/audio/meadow_theme.wav")
+		music_player.stream = MEADOW_THEME
 	music_player.finished.connect(func() -> void: music_player.play())
 	_ensure_music_playing()
 
@@ -128,8 +131,19 @@ func _resume_game() -> void:
 func _on_player_defeated() -> void:
 	if _game_state != GameState.PLAYING:
 		return
+	_game_state = GameState.DEFEATED
+	_player.set_input_enabled(false)
+	_player.begin_death_animation()
+	get_tree().paused = true
+	await _player.death_animation_finished
+	if not is_inside_tree():
+		return
+	get_tree().paused = false
 	_player.reset_to(_player_spawn_position)
 	_player.set_input_enabled(true)
+	_game_state = GameState.PLAYING
+	_ensure_music_playing()
+	_update_overlay_visibility()
 
 func _on_goal_reached() -> void:
 	if _game_state != GameState.PLAYING:

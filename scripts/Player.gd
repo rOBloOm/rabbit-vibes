@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal defeated
+signal death_animation_finished
 
 const MAX_AIR_JUMPS := 1
 const MOVE_SPEED := 300.0
@@ -14,7 +15,12 @@ const RISING_GRAVITY_MULTIPLIER := 0.95
 const LOW_JUMP_GRAVITY_MULTIPLIER := 3.6
 const FALLING_GRAVITY_MULTIPLIER := 2.8
 const MAX_FALL_SPEED := 1450.0
+const JUMP_SOUND := preload("res://assets/audio/rabbit_jump.wav")
+const DEATH_ANIMATION_DURATION := 0.7
+const DEATH_SHAKE_X := 9.0
+const DEATH_SHAKE_Y := 6.0
 
+@onready var _collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var _interaction_area: Area2D = $InteractionArea
 @onready var _jump_player: AudioStreamPlayer2D = $JumpPlayer
 @onready var _visual_root: Node2D = $BunnyVisual
@@ -31,14 +37,18 @@ var _body_base_scale := Vector2.ONE
 var _head_base_position := Vector2.ZERO
 var _front_foot_base_position := Vector2.ZERO
 var _back_foot_base_position := Vector2.ZERO
+var _tail_base_rotation := 0.0
 var _ear_front_base_rotation := 0.0
 var _ear_back_base_rotation := 0.0
+var _visual_base_modulate := Color.WHITE
 var _anim_time := 0.0
 var _facing := 1.0
 var _nearby_patches: Array = []
 var _dig_timer := 0.0
 var _air_jumps_remaining := MAX_AIR_JUMPS
 var _input_enabled := true
+var _death_animating := false
+var _death_elapsed := 0.0
 
 func _ready() -> void:
 	add_to_group("player")
@@ -47,13 +57,27 @@ func _ready() -> void:
 	_head_base_position = _head.position
 	_front_foot_base_position = _front_foot.position
 	_back_foot_base_position = _back_foot.position
+	_tail_base_rotation = _tail.rotation
 	_ear_front_base_rotation = _ear_front.rotation
 	_ear_back_base_rotation = _ear_back.rotation
-	_jump_player.stream = AudioStreamWAV.load_from_file("res://assets/audio/rabbit_jump.wav")
+	_visual_base_modulate = _visual_root.modulate
+	_jump_player.stream = JUMP_SOUND
 	_interaction_area.area_entered.connect(_on_interaction_area_entered)
 	_interaction_area.area_exited.connect(_on_interaction_area_exited)
+	_restore_visual_pose()
+
+func _process(delta: float) -> void:
+	if not _death_animating:
+		return
+	_death_elapsed = minf(_death_elapsed + delta, DEATH_ANIMATION_DURATION)
+	_apply_death_animation()
+	if _death_elapsed >= DEATH_ANIMATION_DURATION:
+		_death_animating = false
+		death_animation_finished.emit()
 
 func _physics_process(delta: float) -> void:
+	if _death_animating:
+		return
 	var current_velocity := velocity
 	var gravity := float(ProjectSettings.get_setting("physics/2d/default_gravity"))
 	var holding_jump := _input_enabled and Input.is_action_pressed("jump")
@@ -106,15 +130,72 @@ func set_input_enabled(enabled: bool) -> void:
 	if not enabled: velocity = Vector2.ZERO
 
 func reset_to(world_position: Vector2) -> void:
+	process_mode = Node.PROCESS_MODE_PAUSABLE
+	_clear_patch_highlights()
 	global_position = world_position
 	velocity = Vector2.ZERO
 	_dig_timer = 0.0
 	_air_jumps_remaining = MAX_AIR_JUMPS
 	_nearby_patches.clear()
-	_visual_root.position = _visual_base_position
+	_death_animating = false
+	_death_elapsed = 0.0
+	_interaction_area.monitoring = true
+	_collision_shape.disabled = false
+	_restore_visual_pose()
+
+func begin_death_animation() -> void:
+	if _death_animating:
+		return
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_input_enabled = false
+	velocity = Vector2.ZERO
+	_dig_timer = 0.0
+	_death_animating = true
+	_death_elapsed = 0.0
+	_clear_patch_highlights()
+	_nearby_patches.clear()
+	_interaction_area.monitoring = false
+	_collision_shape.disabled = true
+	_jump_player.stop()
+	_apply_death_animation()
 
 func defeat() -> void:
+	if _death_animating:
+		return
 	defeated.emit()
+
+func _restore_visual_pose() -> void:
+	_visual_root.position = _visual_base_position
+	var visual_scale_x := _facing if absf(_facing) > 0.01 else 1.0
+	_visual_root.scale = Vector2(visual_scale_x, 1.0)
+	_visual_root.modulate = _visual_base_modulate
+	_body.scale = _body_base_scale
+	_head.position = _head_base_position
+	_front_foot.position = _front_foot_base_position
+	_back_foot.position = _back_foot_base_position
+	_tail.rotation = _tail_base_rotation
+	_ear_front.rotation = _ear_front_base_rotation
+	_ear_back.rotation = _ear_back_base_rotation
+
+func _apply_death_animation() -> void:
+	var t := clampf(_death_elapsed / DEATH_ANIMATION_DURATION, 0.0, 1.0)
+	var rumble := 1.0 - t
+	var shake := Vector2(
+		sin(_death_elapsed * 58.0) * DEATH_SHAKE_X * rumble,
+		cos(_death_elapsed * 74.0) * DEATH_SHAKE_Y * rumble
+	)
+	_visual_root.position = _visual_base_position + shake
+	_visual_root.scale = Vector2(_facing, 1.0)
+	var tint := _visual_base_modulate
+	tint.a = lerpf(_visual_base_modulate.a, 0.0, t)
+	_visual_root.modulate = tint
+	_body.scale = _body_base_scale + Vector2(0.08 * t, -0.2 * t)
+	_head.position = _head_base_position + Vector2(2.0 * rumble, -5.0 * t)
+	_front_foot.position = _front_foot_base_position + Vector2(6.0 * rumble, 4.0 * t)
+	_back_foot.position = _back_foot_base_position + Vector2(3.0 * rumble, 5.0 * t)
+	_tail.rotation = _tail_base_rotation - 0.35 * t
+	_ear_front.rotation = _ear_front_base_rotation + 0.42 * t
+	_ear_back.rotation = _ear_back_base_rotation + 0.34 * t
 
 func _perform_jump(current_velocity: Vector2, is_double_jump: bool) -> Vector2:
 	current_velocity.y = JUMP_VELOCITY * 0.94 if is_double_jump else JUMP_VELOCITY
@@ -141,10 +222,21 @@ func _try_interact() -> bool:
 	return true
 
 func _on_interaction_area_entered(area: Area2D) -> void:
-	if area.is_in_group("carrot_patches") and not _nearby_patches.has(area): _nearby_patches.append(area)
+	if area.is_in_group("carrot_patches"):
+		if not _nearby_patches.has(area):
+			_nearby_patches.append(area)
+		if area.has_method("set_player_nearby"):
+			area.set_player_nearby(true)
 
 func _on_interaction_area_exited(area: Area2D) -> void:
+	if area.is_in_group("carrot_patches") and area.has_method("set_player_nearby"):
+		area.set_player_nearby(false)
 	_nearby_patches.erase(area)
+
+func _clear_patch_highlights() -> void:
+	for patch in _nearby_patches:
+		if is_instance_valid(patch) and patch.has_method("set_player_nearby"):
+			patch.set_player_nearby(false)
 
 func _update_visuals(delta: float) -> void:
 	var speed_ratio := clampf(absf(velocity.x) / MOVE_SPEED, 0.0, 1.0)
