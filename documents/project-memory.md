@@ -22,11 +22,14 @@
 
 ### Environment facts
 - Godot install verified at `C:/Godot_v4.6.1-stable_mono_win64/Godot_v4.6.1-stable_mono_win64.exe`
+- Standard Godot install also verified at `C:/Godot_v4.6.1-stable_win64/Godot_v4.6.1-stable_win64.exe`
 - Verified Godot version: `4.6.1.stable.mono.official.14d19694e`
+- Verified standard Godot version: `4.6.1.stable.official.14d19694e`
 - Verified .NET SDK version: `10.0.100`
 - `C:/dev/jumpy` is now a valid root Godot project
 - Root bootstrap now uses `project.godot`, scene files, and GDScript files under `scripts/*.gd`
 - Verified on 2026-03-08 that the active project is wired to GDScript (`scenes/Main.tscn` -> `scripts/Main.gd`, `scenes/Player.tscn` -> `scripts/Player.gd`) and that no `.cs`, `.csproj`, `.sln`, or `.slnx` files remain in the repository
+- Verified on 2026-03-08 that local Web export with the Mono/.NET Godot build is blocked by Godot 4's C# Web export limitation, while the standard Godot build proceeds past that check and instead requires Web export templates to be installed locally
 - Old C# project files (`jumpy.csproj`, `jumpy.slnx`, `scripts/*.cs`) were removed on 2026-03-07 during the web-export migration
 - Local Git repository initialized on branch `main` on 2026-03-07
 - GitHub Pages deployment scaffolding now exists via `.github/workflows/deploy-pages.yml`, `export_presets.cfg`, and `.gitignore`
@@ -35,7 +38,7 @@
 ### MCP configuration facts
 - Workspace MCP config file: `.augment/settings.json`
 - Godot MCP is configured to launch `node C:/dev/godot-mcp/build/index.js`
-- `GODOT_PATH` was set to the verified Godot executable path
+- `GODOT_PATH` was initially set to the Mono Godot executable path and was updated on 2026-03-08 to `C:/Godot_v4.6.1-stable_win64/Godot_v4.6.1-stable_win64.exe` to prefer the standard build for Web-export-related work
 - `DEBUG` was removed from MCP env because it can interfere with MCP stdio/protocol behavior
 - The in-session Augment Godot tool was stale earlier, but later root project listing and scene creation worked
 

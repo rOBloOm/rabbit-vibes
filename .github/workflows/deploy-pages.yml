@@ -43,15 +43,39 @@ jobs:
           mkdir -p "$HOME/.local/share/godot/export_templates/${GODOT_VERSION_DIR}"
           cp -r "$RUNNER_TEMP/templates/templates/." "$HOME/.local/share/godot/export_templates/${GODOT_VERSION_DIR}/"
 
+      - name: Show installed export templates
+        run: |
+          echo "GODOT_BIN=$GODOT_BIN"
+          echo "Expected templates dir: $HOME/.local/share/godot/export_templates/${GODOT_VERSION_DIR}"
+          ls -la "$HOME/.local/share/godot/export_templates/${GODOT_VERSION_DIR}" || true
+          find "$HOME/.local/share/godot/export_templates/${GODOT_VERSION_DIR}" -maxdepth 1 -type f | sort || true
+
       - name: Import assets
         run: |
           "$GODOT_BIN" --headless --path "$GITHUB_WORKSPACE" --import
 
+      - name: Show export-related project settings
+        run: |
+          echo "== project.godot =="
+          grep -nE "^\[application\]|^\[rendering\]|^\[dotnet\]|config/name|run/main_scene|config/features|renderer/rendering_method\.web|project/assembly_name" project.godot || true
+          echo "== export_presets.cfg =="
+          sed -n '1,200p' export_presets.cfg
+
       - name: Export Web build
         run: |
+          set -o pipefail
           mkdir -p build/web
-          "$GODOT_BIN" --headless --path "$GITHUB_WORKSPACE" --export-release "Web" build/web/index.html
+          "$GODOT_BIN" --headless --verbose --path "$GITHUB_WORKSPACE" --export-release "Web" build/web/index.html 2>&1 | tee build/web/export.log
           touch build/web/.nojekyll
+
+      - name: Show export diagnostics on failure
+        if: failure()
+        run: |
+          echo "== build/web/export.log =="
+          cat build/web/export.log || true
+          echo "== installed export templates =="
+          ls -la "$HOME/.local/share/godot/export_templates/${GODOT_VERSION_DIR}" || true
+          find "$HOME/.local/share/godot/export_templates/${GODOT_VERSION_DIR}" -maxdepth 1 -type f | sort || true
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
